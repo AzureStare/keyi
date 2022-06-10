@@ -1,0 +1,39 @@
+server:
+  port: 8095
+spring:
+  messages:
+    basename: i18n/messages
+    encoding: UTF-8
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        jdbc:
+          hbatch_size: 1
+        format_sql: true
+        order_inserts: true
+        order_updates: true
+        generate_statistics: true
+  servlet:
+    multipart:
+      maxFileSize: 100MB
+
+      max-request-size: 100MB
+  datasource:
+    #url: jdbc:mysql://192.168.157.134:3306/yixue?useSSL=false&useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://127.0.0.1:3306/yixue?useSSL=false&useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+logging:
+  level:
+    ROOT: INFO
+    com.oxhainan.medichainservice: DEBUG
+
+mybatis-plus:
+  #实体扫描，多个package用逗号或者分号分隔
+  typeAliasesPackage: com.shaoshi.yixue.entity
+  mapper-locations: classpath:mapper/*.xml
