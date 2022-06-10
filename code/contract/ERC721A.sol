@@ -187,7 +187,7 @@ contract ERC721A is Context, ERC165, IERC721A {
         if (!_exists(tokenId)) revert URIQueryForNonexistentToken();
 
         string memory baseURI = _baseURI();
-        return bytes(baseURI).length != 0 ? string(abi.encodePacked(baseURI, tokenId.toString())) : '';
+        return bytes(baseURI).length != 0 ? string(abi.encodePacked(baseURI, _IPFSHash(tokenId))) : '';
     }
 
     /**
@@ -198,6 +198,11 @@ contract ERC721A is Context, ERC165, IERC721A {
     function _baseURI() internal view virtual returns (string memory) {
         return '';
     }
+
+    function _IPFSHash(uint256 tokenId) internal view virtual returns (string memory) {
+        return '';
+    }
+
 
     /**
      * @dev See {IERC721-approve}.

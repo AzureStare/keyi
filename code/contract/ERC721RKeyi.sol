@@ -20,9 +20,13 @@ contract ERC721RKeyi is ERC721A, Ownable {
     uint256 public constant maxUserMintAmount = 5;
     bytes32 public merkleRoot;
 
+    uint256 private nonce; // nonce for random;
+
     mapping(uint256 => bool) public hasRefunded; // users can search if the NFT has been refunded
     mapping(uint256 => bool) public isPresaleMint; //if the NFT was minted with presale Price
     mapping(uint256 => bool) public isFreeMint; //if the NFT was minted free
+    mapping(uint256 => uint8) public fortuneType;
+    mapping(uint8 => string) private ipfsHash;
 
     string private baseURI;
 
@@ -47,7 +51,7 @@ contract ERC721RKeyi is ERC721A, Ownable {
         );
         require(_totalMinted() + quantity <= maxMintSupply, "Max mint supply");
 
-        _safeMint(msg.sender, quantity);
+        safeMint(msg.sender, quantity);
         for (uint256 i = _currentIndex - quantity; i < _currentIndex; i++) {
             isPresaleMint[i] = true;
         }
@@ -65,7 +69,7 @@ contract ERC721RKeyi is ERC721A, Ownable {
             "Max mint supply reached"
         );
 
-        _safeMint(msg.sender, quantity);
+        safeMint(msg.sender, quantity);
     }
 
     function freeMint(uint256 quantity) external {
@@ -73,7 +77,7 @@ contract ERC721RKeyi is ERC721A, Ownable {
             _totalMinted() + quantity <= maxMintSupply,
             "Max mint supply reached"
         );
-        _safeMint(msg.sender, quantity);
+        safeMint(msg.sender, quantity);
 
         for (uint256 i = _currentIndex - quantity; i < _currentIndex; i++) {
             isFreeMint[i] = true;
@@ -121,6 +125,14 @@ contract ERC721RKeyi is ERC721A, Ownable {
         return baseURI;
     }
 
+    function _IPFSHash(uint256 tokenId) internal view override returns (string memory) {
+        return ipfsHash[fortuneType[tokenId]];
+    }
+
+    function setIPFSHash(uint8 _fType, string memory hash) external onlyOwner {
+        ipfsHash[_fType] = hash;
+    }
+
     function setRefundAddress(address _refundAddress) external onlyOwner {
         refundAddress = _refundAddress;
     }
@@ -143,6 +155,25 @@ contract ERC721RKeyi is ERC721A, Ownable {
 
     function togglePublicSaleStatus() external onlyOwner {
         publicSaleActive = !publicSaleActive;
+    }
+
+    function safeMint(address to, uint256 quantity) internal {
+        _safeMint(to, quantity);
+        for (uint256 i = _currentIndex - quantity; i < _currentIndex; i++) {
+            fortuneType[i] = uint8(random(i)) & 0x3F;
+        }
+    }
+
+
+    function random(uint256 seed) internal returns (uint256) {
+        nonce = nonce + 1;
+        return uint256(keccak256(abi.encodePacked(
+          tx.origin,
+          blockhash(block.number - 1),
+          block.timestamp,
+          nonce,
+          seed
+        )));
     }
 
     function _leaf(address _account) internal pure returns (bytes32) {
