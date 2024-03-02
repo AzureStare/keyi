@@ -214,7 +214,7 @@ export default {
         word: ''
       },
       isOver: true,
-      contractAddress1: '0xa23f252d6b0Df43B8A83A2D7FB256b6a2216731c',
+      contractAddress1: '0xEB4AE79cf7b722C6aeC5b08EC11f59EA31B04a4A',
       abi1: [
         {
           inputs: [],

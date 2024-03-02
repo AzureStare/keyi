@@ -69,7 +69,7 @@ export default {
       visible: false,
       placement: 'left',
       address: 'collect wallet',
-      contractAddress: '0x31964dFF0A9F49e570375802671954Ab8fEedF7E',
+      contractAddress: '0xF172ebE4bACdC831644Ad94280Dc6c4991B24Db0',
       abi: [
         {
           constant: false,
@@ -106,10 +106,10 @@ export default {
           type: 'function'
         }
       ],
-      chainId: '0x4',
+      chainId: '0x5',
       isHaveAddres: false,
       provider: null,
-      rpcUrls: 'https://rinkeby.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161',
+      rpcUrls: 'https://goerli.infura.io/v3/f6d668d35fc04869874b01870296bc20',
       accountsPermission: null
     }
   },
